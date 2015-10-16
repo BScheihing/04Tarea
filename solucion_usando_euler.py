@@ -21,7 +21,10 @@ for i in range(10000):
 x_pos = np.array(x_pos)
 y_pos = np.array(y_pos)
 energia = np.array(energia)
-fig = plt.figure(1)
-fig.clf()
+
+plt.figure(1)
 plt.plot(x_pos,y_pos)
+plt.show()
+plt.figure(2)
+plt.plot(range(10000),energia)
 plt.show()
