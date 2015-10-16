@@ -2,14 +2,19 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+#Masa del cuerpo central: M = 1.498 x 10^10 kg (tal que G*M = 1 N m^2/kg)
 GM = 1
 
 class Planeta(object):
     '''
-    Complete el docstring.
+    Esta clase permite construir planetas, con una masa, condiciones iniciales
+    y una corrección relativista. La clase permite avanzar al planeta en su
+    órbita, guardando la posición actual, el instante de tiempo actual,
+    y la posición anterior. También permite evaluar la energía del planeta en
+    el instante actual.
     '''
 
-    def __init__(self, condicion_inicial, alpha=0):
+    def __init__(self, condicion_inicial, alpha=0, masa=1):
         '''
         __init__ es un método especial que se usa para inicializar las
         instancias de una clase.
@@ -23,6 +28,7 @@ class Planeta(object):
         self.y_actual = np.array(condicion_inicial)
         self.t_actual = 0.
         self.alpha = alpha
+        self.mass = masa
 
     def ecuacion_de_movimiento(self):
         '''
@@ -88,4 +94,4 @@ class Planeta(object):
         K = (pos[2]**2 + pos[3]**2)/2
         r = np.sqrt(pos[0]**2 + pos[1]**2)
         U = -GM/r + self.alpha*GM/r**2
-        return K + U
+        return (K + U)*self.mass
