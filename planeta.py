@@ -36,10 +36,10 @@ class Planeta(object):
         primer orden.
         '''
         x, y, vx, vy = self.y_actual
-        r = np.sqrt(x**2+y**2)
+        r = np.sqrt(x**2 + y**2)
         cos_p = x/r
         sen_p = y/r
-        ar = 2*self.alpha/r**3 - 1/r**2
+        ar = 2*self.alpha/(r**3) - 1/(r**2)
         ax = ar*GM*cos_p
         ay = ar*GM*sen_p
         return np.array([vx, vy, ax, ay])
