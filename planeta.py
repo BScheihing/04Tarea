@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import numpy as np
+
+GMm = 1
 
 class Planeta(object):
     '''
@@ -26,8 +29,12 @@ class Planeta(object):
         primer orden.
         '''
         x, y, vx, vy = self.y_actual
-        # fx = ...
-        # fy = ...
+        r = np.sqrt(x**2+y**2)
+        cosp = x/r
+        senp = y/r
+        fp = 2*self.alpha/r**3 - 1/r**2
+        fx = fp*GMm*cosp
+        fy = fp*GMm*senp
         return [vx, vy, fx, fy]
 
     def avanza_euler(self, dt):
@@ -55,5 +62,3 @@ class Planeta(object):
         Calcula la enérgía total del sistema en las condiciones actuales.
         '''
         pass
-
-
