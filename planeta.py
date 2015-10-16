@@ -82,6 +82,10 @@ class Planeta(object):
 
     def energia_total(self):
         '''
-        Calcula la enérgía total del sistema en las condiciones actuales.
+        Calcula la energía total del sistema en las condiciones actuales.
         '''
-        pass
+        pos = self.y_actual
+        K = (pos[2]**2 + pos[3]**2)/2
+        r = np.sqrt(pos[0]**2 + pos[1]**2)
+        U = -GM/r + self.alpha*GM/r**2
+        return K + U
