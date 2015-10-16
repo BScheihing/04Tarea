@@ -12,11 +12,12 @@ x_pos = []
 y_pos = []
 energia = []
 dt=0.1
+Mars.avanza_rk4(dt)
 for i in range(10000):
     x_pos.append(Mars.y_actual[0])
     y_pos.append(Mars.y_actual[1])
     energia.append(Mars.energia_total())
-    Mars.avanza_euler(dt)
+    Mars.avanza_verlet(dt)
 
 x_pos = np.array(x_pos)
 y_pos = np.array(y_pos)
