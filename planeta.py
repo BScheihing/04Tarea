@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-GMm = 1
+GM = 1
 
 class Planeta(object):
     '''
@@ -19,7 +19,8 @@ class Planeta(object):
         >> print(mercurio.alpha)
         >> 0.
         '''
-        self.y_actual = condicion_inicial
+        self.y_anterior = np.array([])
+        self.y_actual = np.array(condicion_inicial)
         self.t_actual = 0.
         self.alpha = alpha
 
@@ -30,12 +31,12 @@ class Planeta(object):
         '''
         x, y, vx, vy = self.y_actual
         r = np.sqrt(x**2+y**2)
-        cosp = x/r
-        senp = y/r
-        fp = 2*self.alpha/r**3 - 1/r**2
-        fx = fp*GMm*cosp
-        fy = fp*GMm*senp
-        return np.array([vx, vy, fx, fy])
+        cos_p = x/r
+        sen_p = y/r
+        ar = 2*self.alpha/r**3 - 1/r**2
+        ax = ar*GM*cos_p
+        ay = ar*GM*sen_p
+        return np.array([vx, vy, ax, ay])
 
     def avanza_euler(self, dt):
         '''
@@ -43,9 +44,10 @@ class Planeta(object):
         en un intervalo de tiempo dt usando el método de Euler explícito. El
         método no retorna nada, pero re-setea los valores de self.y_actual.
         '''
-        x, y, vx, vy = self.y_actual
-        dx, dy, dvx, dvy = self.ecuacion_de_movimiento()
-        self.y_actual = np.array([x+dt*dx, y+dt*dy, vx+dt*dvy, vy+dt*dvx])
+        pos = self.y_actual
+        dpos = self.ecuacion_de_movimiento()
+        self.y_anterior = pos
+        self.y_actual = pos + dt*dpos
         self.t_actual += dt
         pass
 
@@ -53,7 +55,7 @@ class Planeta(object):
         '''
         Similar a avanza_euler, pero usando Runge-Kutta 4.
         '''
-        pos = np.array(self.y_actual)
+        pos = self.y_actual
         K1 = self.ecuacion_de_movimiento()
         self.y_actual = pos + dt*K1/2.
         K2 = self.ecuacion_de_movimiento()
@@ -61,6 +63,7 @@ class Planeta(object):
         K3 = self.ecuacion_de_movimiento()
         self.y_actual = pos + dt*K3
         K4 = self.ecuacion_de_movimiento()
+        self.y_anterior = pos
         self.y_actual = pos + (K1+2*K2+2*K3+K4)*dt/6.
         self.t_actual += dt
         pass
@@ -69,6 +72,12 @@ class Planeta(object):
         '''
         Similar a avanza_euler, pero usando Verlet.
         '''
+        acel = self.ecuacion_de_movimiento()
+        pos_n1 = 2*self.y_actual[0:2] - self.y_anterior[0:2] + (dt**2)*acel[2:4]
+        vel_n1 = (pos_n1 - self.y_actual[0:2])/dt
+        self.y_anterior = self.y_actual
+        self.y_actual = np.concatenate((pos_n1,vel_n1))
+        self.t_actual += dt
         pass
 
     def energia_total(self):
