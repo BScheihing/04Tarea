@@ -5,6 +5,7 @@ from planeta import Planeta
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Solucion a trayectoria
 condicion_inicial = [10.0, 0.0, 0.0, 0.3]
 
 Mercury = Planeta(condicion_inicial,10**(-2.350))
@@ -23,7 +24,7 @@ x_pos = np.array(x_pos)
 y_pos = np.array(y_pos)
 energia = np.array(energia)
 
-#Calculo de momentos en perihelio y frecuencia de precesion
+#Calculo de instantes en perihelio y frecuencia de precesion
 r = np.sqrt(np.power(x_pos,2)+np.power(y_pos,2))
 r_maximo = max(r)
 esta_en_perihelio = False
@@ -40,27 +41,35 @@ for i in range(len(r)):
     if not esta_en_perihelio:
         if abs(r[i] - r_maximo)<10**(-6):
             esta_en_perihelio = True
-            tiempos_perihelio.append(i*dt)
+            tiempos_perihelio.append(i)
             angulos_perihelio.append(angulo_actual)
             counter+=1
     elif out_perihelio<=angulo_actual:
         if abs(r[i] - r_maximo)>=10**(-6):
             esta_en_perihelio = False
 
-t = np.array(tiempos_perihelio)
+t = np.array(tiempos_perihelio)*dt
 angulos = np.array(angulos_perihelio)
 vel_angular_prec = (angulos[2:]-angulos[1:-1])/(t[2:]-t[1:-1])
 
+#Resultados
 print "Velocidad angular de precesion:", np.mean(vel_angular_prec), "[rad/s]"
 print "Desviacion estandar de velocidad angular de precesion", np.std(vel_angular_prec), "[rad/s]"
 print "Tiempo entre perihelios:", np.mean(t[2:]-t[1:-1]), "[s]"
 print "Angulo precesado por orbita:", np.mean(angulos[2:]-angulos[1:-1]), "[rad]"
 
-plt.figure(1)
-plt.plot(x_pos,y_pos)
-plt.xlabel('x [m]')
-plt.ylabel('y [m]')
-plt.title(u'Ó''rbita perturbada, ''$\\alpha = 10^{-2.350}$')
+fig = plt.figure(1)
+ax = fig.add_subplot(111)
+ax.plot(x_pos[0:tiempos_perihelio[1]],y_pos[0:tiempos_perihelio[1]],label='Primera orbita')
+ax.plot(x_pos[tiempos_perihelio[-2]:],y_pos[tiempos_perihelio[-2]:],label='Ultima orbita')
+ax.set_xlabel('x [m]')
+ax.set_ylabel('y [m]')
+ax.set_xlim([-10,12])
+ax.set_ylim([-11,13])
+ax.set_title(u'Ó''rbita perturbada, ''$\\alpha = 10^{-2.350}$')
+ax.set_aspect('equal')
+ax.legend()
+plt.savefig('Orb_prec.eps')
 plt.show()
 plt.figure(2)
 plt.plot(np.array(range(600001))*dt,energia)
@@ -69,4 +78,5 @@ plt.ylabel('Energ'u'í''a [J]')
 plt.ylim([-0.1,0])
 plt.title('Evoluci'u'ó''n de la energ'u'í''a total en el tiempo, \
 ''$\\alpha = 10^{-2.350}$')
+plt.savefig('Energ_prec.eps')
 plt.show()
