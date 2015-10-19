@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+'''
+Este script utiliza la clase Planeta para resolver la órbita de un planeta de
+masa 1 kg, orbitando un cuerpo central de masa M = 1.498 x 10^10 kg. El
+movimiento es determinado usando el método de Euler explícito. Al final se
+presentan los resultados en forma de gráficos de la órbita y de la energía en
+el tiempo.
+'''
+
 from planeta import Planeta
 import numpy as np
 import matplotlib.pyplot as plt
