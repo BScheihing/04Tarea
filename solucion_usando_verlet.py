@@ -12,6 +12,9 @@ x_pos = []
 y_pos = []
 energia = []
 dt=0.1
+x_pos.append(Mars.y_actual[0])
+y_pos.append(Mars.y_actual[1])
+energia.append(Mars.energia_total())
 Mars.avanza_rk4(dt)
 for i in range(10000):
     x_pos.append(Mars.y_actual[0])
@@ -30,8 +33,9 @@ plt.ylabel('y [m]')
 plt.title(u'Ó''rbita descrita por planeta (m'u'é''todo de Verlet)')
 plt.show()
 plt.figure(2)
-plt.plot(np.array(range(10000))*0.1,energia)
+plt.plot(np.array(range(10001))*dt,energia)
 plt.xlabel('Tiempo [s]')
 plt.ylabel('Energ'u'í''a [J]')
+plt.ylim([-0.1,0])
 plt.title('Evoluci'u'ó''n de la energ'u'í''a total en el tiempo')
 plt.show()
