@@ -45,6 +45,8 @@ for i in range(len(r)):
     angulo_actual = np.arctan2(y_pos[i],x_pos[i])
     if counter>=1:
         ultimo_perihelio = angulos_perihelio[counter-1]
+        #out_perihelio es el ángulo para el cual se considera que el planeta ya
+        #está fuera de la región del perihelio.
         out_perihelio = np.mod(ultimo_perihelio + np.pi +
         np.pi/2 ,2*np.pi) - np.pi
     if not esta_en_perihelio:
@@ -63,14 +65,22 @@ vel_angular_prec = (angulos[2:]-angulos[1:-1])/(t[2:]-t[1:-1])
 
 #Resultados
 print "Velocidad angular de precesion:", np.mean(vel_angular_prec), "[rad/s]"
-print "Desviacion estandar de velocidad angular de precesion", np.std(vel_angular_prec), "[rad/s]"
+
+print "Desviacion estandar de velocidad angular de precesion",
+print np.std(vel_angular_prec), "[rad/s]"
+
 print "Tiempo entre perihelios:", np.mean(t[2:]-t[1:-1]), "[s]"
-print "Angulo precesado por orbita:", np.mean(angulos[2:]-angulos[1:-1]), "[rad]"
+
+print "Angulo precesado entre perihelios:", np.mean(angulos[2:]-angulos[1:-1]),
+print "[rad]"
 
 fig = plt.figure(1)
 ax = fig.add_subplot(111)
-ax.plot(x_pos[0:tiempos_perihelio[1]],y_pos[0:tiempos_perihelio[1]],label='Primera orbita')
-ax.plot(x_pos[tiempos_perihelio[-2]:],y_pos[tiempos_perihelio[-2]:],label='Ultima orbita')
+ax.plot(x_pos[0:tiempos_perihelio[1]],y_pos[0:tiempos_perihelio[1]],
+label='Primera orbita',color='b')
+ax.plot(x_pos[tiempos_perihelio[-2]:],y_pos[tiempos_perihelio[-2]:],
+label='Ultima orbita',color='g')
+ax.plot(0,0,'o',color='r',linewidth=2.0)
 ax.set_xlabel('x [m]')
 ax.set_ylabel('y [m]')
 ax.set_xlim([-10,12])

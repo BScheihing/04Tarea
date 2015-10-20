@@ -39,9 +39,9 @@ class Planeta(object):
         r = np.sqrt(x**2 + y**2)
         cos_p = x/r
         sen_p = y/r
-        ar = 2*self.alpha/(r**3) - 1/(r**2)
-        ax = ar*GM*cos_p
-        ay = ar*GM*sen_p
+        a_radial = 2*self.alpha/(r**3) - 1/(r**2)
+        ax = a_radial*GM*cos_p
+        ay = a_radial*GM*sen_p
         return np.array([vx, vy, ax, ay])
 
     def avanza_euler(self, dt):
